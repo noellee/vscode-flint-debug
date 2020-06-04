@@ -1,0 +1,147 @@
+{
+    "name": "flint-debug",
+    "displayName": "Flint Debug",
+    "version": "0.1.0",
+    "publisher": "noellee",
+    "description": "Flint debugger",
+    "author": {
+        "name": "Noel Lee",
+        "email": "kyl116@ic.ac.uk"
+    },
+    "license": "MIT",
+    "keywords": [
+        "flint",
+        "flintlang",
+        "smart contracts"
+    ],
+    "engines": {
+        "vscode": "^1.44.0"
+    },
+    "categories": [
+        "Debuggers"
+    ],
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/noellee/vscode-flint-debug.git"
+    },
+    "bugs": {
+        "url": "https://github.com/noellee/vscode-flint-debug/issues"
+    },
+    "scripts": {
+        "prepublish": "tsc -p ./src",
+        "compile": "tsc -p ./src",
+        "lint": "eslint . --ext .ts",
+        "watch": "tsc -w -p ./src",
+        "package": "vsce package",
+        "publish": "vsce publish"
+    },
+    "dependencies": {
+        "vscode-debugadapter": "1.40.0"
+    },
+    "devDependencies": {
+        "@types/node": "10.12.12",
+        "@types/vscode": "^1.44.0",
+        "@typescript-eslint/eslint-plugin": "^3.1.0",
+        "@typescript-eslint/parser": "^3.1.0",
+        "eslint": "^7.1.0",
+        "tslint": "5.18.0",
+        "typescript": "3.5.3",
+        "vsce": "1.74.0"
+    },
+    "main": "./out/extension",
+    "activationEvents": [
+        "onDebug",
+        "onCommand:extension.flint-debug.getTransactionHash"
+    ],
+    "contributes": {
+        "configuration": {
+            "title": "Flint Debug",
+            "properties": {
+                "flint-debug.executable": {
+                    "type": "string",
+                    "format": "file",
+                    "description": "Location of the flint-da executable."
+                },
+                "flint-debug.logging.enable": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enables Flint debug adapter logs."
+                },
+                "flint-debug.logging.logFilePath": {
+                    "type": "string",
+                    "description": "Path to log file."
+                },
+                "flint-debug.logging.logLevel": {
+                    "type": "string",
+                    "default": "info",
+                    "enum": ["error", "warning", "info", "debug"],
+                    "description": "Verbosity of logging."
+                }
+            }
+        },
+        "breakpoints": [
+            {
+                "language": "flint"
+            }
+        ],
+        "debuggers": [
+            {
+                "type": "flint",
+                "label": "Flint Debug",
+                "configurationAttributes": {
+                    "launch": {
+                        "required": [
+                            "txHash",
+                            "artifactDirectory",
+                            "rpcUrl"
+                        ],
+                        "properties": {
+                            "txHash": {
+                                "type": "string",
+                                "description": "Transaction hash to debug",
+                                "default": "${command:AskForTransactionHash}"
+                            },
+                            "artifactDirectory": {
+                                "type": "string",
+                                "description": "Directory containing Flint compiler artifacts"
+                            },
+                            "rpcUrl": {
+                                "type": "string",
+                                "description": "Ethereum client RPC URL",
+                                "default": "http://localhost:8545"
+                            }
+                        }
+                    }
+                },
+                "initialConfigurations": [
+                    {
+                        "type": "flint",
+                        "request": "launch",
+                        "name": "Ask for transaction hash",
+                        "txHash": "${command:AskForTransactionHash}",
+                        "artifactDirectory": "${workspaceFolder}/bin",
+                        "rpcUrl": "http://localhost:8545"
+                    }
+                ],
+                "configurationSnippets": [
+                    {
+                        "label": "Flint Debug: Launch",
+                        "description": "A new configuration for debugging a Flint transaction",
+                        "body": {
+                            "type": "flint",
+                            "request": "launch",
+                            "name": "Ask for transaction hash",
+                            "txHash": "^\"\\${command:AskForTransactionHash}\"",
+                            "artifactDirectory": "^\"\\${workspaceFolder}/bin\"",
+                            "rpcUrl": "http://localhost:8545"
+                        }
+                    }
+                ],
+                "variables": {
+                    "AskForTransactionHash": "extension.flint-debug.getTransactionHash"
+                }
+            }
+        ]
+    }
+}
