@@ -1,5 +1,9 @@
 # Flint Debug Extension for VS Code
 
+[![vsm-version](https://img.shields.io/visual-studio-marketplace/v/noellee-doc.flint-debug?style=flat&label=VS%20Marketplace&logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=noellee-doc.flint-debug)
+
+Visual Studio Code debugger extension for [Flint](https://github.com/flintlang/flint).
+
 ## Configuration
 
 This extension must be configured correctly before it can be used properly!
@@ -22,4 +26,29 @@ Options:
 
 2. Go to VS Code settings and set **Executable** to the *full path* of `flint-da`.
 
-![Image of Yaktocat](images/vscode-settings.png)
+![vscode settings](images/vscode-settings.png)
+
+## Usage
+
+1. Create a `launch.json` file with the *Flint Debug* default configuration.
+
+2. The configuration should look like this in your `launch.json`.
+
+```json
+{
+    "type": "flint",
+    "request": "launch",
+    "name": "Ask for transaction hash",
+    "txHash": "${command:AskForTransactionHash}",
+    "artifactDirectory": "${workspaceFolder}/bin",
+    "rpcUrl": "http://localhost:8545"
+}
+```
+
+3. Change the `artifactDirectory` and `rpcUrl` if your setup is different from the default values.
+
+4. Run the configuration. It should prompt you for a transaction hash to debug.
+
+![launching the debugger](images/launch.png)
+
+5. Start debugging!
