@@ -1,7 +1,7 @@
 {
     "name": "flint-debug",
     "displayName": "Flint Debug",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "publisher": "noellee-doc",
     "description": "Flint debugger",
     "author": {
